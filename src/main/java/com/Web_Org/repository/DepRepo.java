@@ -16,4 +16,8 @@ public interface DepRepo extends CrudRepository<Department, Integer> {
     // Список сотрудников в отделе по id отдела
     List<Department> findDepartmentsByEmployeesId(Integer EmpId);
 
+    // Список вышестоящих отеделов (в них будет содержаться информация о всех остальных)
+    // признак самого главного отдела - отсутсвие заполненного поля "вышестоящий отдел"
+    List<Department> findBySuperDepartmentIsNull();
+
 }

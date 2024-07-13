@@ -1,8 +1,8 @@
 package com.Web_Org.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,10 +18,17 @@ public class Department {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String name;
+
     // Вышестоящий отдел
     @ManyToOne
     @JoinColumn(name="sup_department_id")
-    private Department sup_department;
+    //@JsonIgnore
+    private Department superDepartment;     // !!! Нижние подчеркивания также плохо воспринимаются jpa
+
+    // Подчиняющиеся
+    @OneToMany (mappedBy = "superDepartment") // связь через поле superDepartment
+    @JsonIgnore
+    private  Set<Department> subDepartments = new HashSet<>();
 
     // Сотдруники отдела
     @ManyToMany(                                                    // Связь многие ко многим
@@ -39,9 +46,9 @@ public class Department {
     public Department() {
 
     }
-    public Department(String name, Department sup_department) {
+    public Department(String name, Department superDepartment) {
         this.name = name;
-        this.sup_department = sup_department;
+        this.superDepartment = superDepartment;
     }
 
 
@@ -52,13 +59,16 @@ public class Department {
     public void setName(String name) {
         this.name = name;
     }
-    public void setSup_department(Department sup_department) {
-        this.sup_department = sup_department;
+    public void setSuperDepartment(Department superDepartment) {
+        this.superDepartment = superDepartment;
+    }
+    public void setSub_departments(Set<Department> subDepartments) {
+        this.subDepartments = subDepartments;
     }
 
     // Геттеры
-    public Department getSup_department() {
-        return sup_department;
+    public Department getSuperDepartment() {
+        return superDepartment;
     }
 
     public String getName() {
@@ -69,7 +79,11 @@ public class Department {
         return id;
     }
 
-    // Геттеры и сеттеры для объектов связи
+    public Set<Department> getsubDepartments() {
+        return subDepartments;
+    }
+
+    // Геттеры и сеттеры для объектов связи c сотрудниками
 
     public Set<Employee> getEmployees() {
         return employees;

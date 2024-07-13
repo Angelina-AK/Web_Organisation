@@ -40,4 +40,9 @@ public class DepController {
         return depservice.getAllEmployeesByDepartmentId(dep_id);
     }
 
+    // Отображение главных отделов
+    @GetMapping("/super_departments")
+    public List<Department> getSuperDepartments() {
+        return depservice.getSuperDepartments();
+    }
 }

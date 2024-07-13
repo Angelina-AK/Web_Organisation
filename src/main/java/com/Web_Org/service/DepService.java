@@ -50,4 +50,12 @@ public class DepService {
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
     //_____________________________________________________________________________________________
+
+    // Получение самых главных отделов
+    public List<Department> getSuperDepartments() {
+        List<Department> super_depts = (List<Department>)deprepo.findBySuperDepartmentIsNull();
+        return super_depts;
+    }
+
+
 }
